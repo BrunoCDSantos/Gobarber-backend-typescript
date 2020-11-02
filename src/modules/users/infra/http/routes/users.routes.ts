@@ -1,43 +1,25 @@
 import { Router } from 'express';
+
 import multer from 'multer';
 import uploadConfig from '@config/upload';
 
-import CreateUserService from '@modules/users/services/CreateUserService';
-import UpdateAvatarService from '@modules/users/services/UpdateUserAvatarService';
+import UserController from '../controllers/UsersController';
+import UserAvatarController from '../controllers/UserAvatarController';
 
 import ensureAuthentication from '../middlewares/ensureAuthenticated';
 
 const userRouter = Router();
 const upload = multer(uploadConfig);
+const userController = new UserController();
+const userAvatarController = new UserAvatarController();
 
-userRouter.post('/', async (request, response) => {
-  const { name, email, password } = request.body;
-
-  const createUser = new CreateUserService();
-
-  const user = await createUser.execute({
-    name,
-    email,
-    password,
-  });
-
-  return response.json(user);
-});
+userRouter.post('/', userController.create);
 
 userRouter.patch(
   '/avatar',
   ensureAuthentication,
   upload.single('avatar'),
-  async (request, response) => {
-    const updateUserAvatar = new UpdateAvatarService();
-
-    const user = await updateUserAvatar.execute({
-      user_id: request.user.id,
-      avatarFilename: request.file.filename,
-    });
-
-    return response.json(user);
-  },
+  userAvatarController.update,
 );
 
 export default userRouter;
