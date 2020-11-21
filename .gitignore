@@ -2,6 +2,7 @@ node_modules
 ormconfig.json
 src/config
 temp/
+coverage
 
 tmp/*
 !tmp/.gitkeep
