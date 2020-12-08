@@ -18,9 +18,9 @@ describe('CreateAppoitment', () => {
 
     expect(appointment).toHaveProperty('id');
     expect(appointment.provider_id).toBe('111');
-  })
+  });
 
-  it('should be able to create a new appointment', async() => {
+  it('should not be able to create a new user with same email from another', async () => {
     const fakeAppointmentsRepository = new FakeAppointmentsRepository();
     const createAppointmentService = new CreateAppointmentService(
       fakeAppointmentsRepository
